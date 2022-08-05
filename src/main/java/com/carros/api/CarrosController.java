@@ -1,17 +1,25 @@
 package com.carros.api;
 
+import com.carros.domain.Carro;
 import com.carros.domain.CarroService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController // todos os web services precisão estar anotados com essa notação, é isso que TRANSFORMA essa CLASSE em um service HASH
 @RequestMapping("/api/v1/carros") // Basicamente irá dizer q esse WebService esta mapeado para o barra neste caso.
 public class CarrosController {
-    private CarroService service = new CarroService();
+    //private CarroService service = new CarroService();
 
+    /* Não precisa dar um new na classe service pois assim como aconteceu no Classe CarroSerive adcionando
+    o @Service aqui só precisamos adiconar o @Autowired que ele cria o obj */
+    @Autowired
+    private CarroService service;
     @GetMapping()// usa o "/" do mapeamento acima por default ao chamar essa página irá chamar o GetMapping, isso acontce pq apliquei o @GetMapping, neste caso ele herda ("/") feito no RequestMapping se eu não passar nada.
-    public String get(){
+    public List<Carro> get(){
         return service.getCarros();
     }
 
