@@ -3,11 +3,10 @@ package com.carros.api;
 import com.carros.domain.Carro;
 import com.carros.domain.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController // todos os web services precisão estar anotados com essa notação, é isso que TRANSFORMA essa CLASSE em um service HASH
 @RequestMapping("/api/v1/carros") // Basicamente irá dizer q esse WebService esta mapeado para o barra neste caso.
@@ -19,45 +18,45 @@ public class CarrosController {
     @Autowired
     private CarroService service;
     @GetMapping()// usa o "/" do mapeamento acima por default ao chamar essa página irá chamar o GetMapping, isso acontce pq apliquei o @GetMapping, neste caso ele herda ("/") feito no RequestMapping se eu não passar nada.
-    public List<Carro> get(){
+    public Iterable<Carro> get(){
+
         return service.getCarros();
     }
 
+    @GetMapping("/{id}")// usa o "/" do mapeamento acima por default ao chamar essa página irá chamar o GetMapping, isso acontce pq apliquei o @GetMapping, neste caso ele herda ("/") feito no RequestMapping se eu não passar nada.
+    public Optional<Carro> get(@PathVariable("id") Long id){
 
-
-     /*@PostMapping("/login")
-    public String login(@RequestParam("login") String login1, @RequestParam("senha") String senha1){
-        return "Login: "+ login1 + ", senha: " + senha1;
+        return service.getCarroById(id);
     }
 
-   @GetMapping("/login/{login}/senha/{senha}")
-    public String login(@PathVariable("login") String login1, @PathVariable("senha") String senha1){
-        return "Login: "+ login1 + ", senha: " + senha1;
-    }
-    @GetMapping("/carros/{id}")
-    public String getCarrosById(@PathVariable("id") Long id){
-        return "Carro by id : " + id;
+    @GetMapping("/tipo/{tipo}")// usa o "/" do mapeamento acima por default ao chamar essa página irá chamar o GetMapping, isso acontce pq apliquei o @GetMapping, neste caso ele herda ("/") feito no RequestMapping se eu não passar nada.
+    public Iterable<Carro> getCarrosByTipo(@PathVariable("tipo") String tipo){
+
+        return service.getCarroByTipo(tipo);
     }
 
-    @GetMapping("/carros/tipo/{tipo}")
-    public String getCarrosById(@PathVariable("tipo") String tipo){
-        return "Lista de Carro : " + tipo;
+    @PostMapping
+    public String post(@RequestBody Carro carro){
+        Carro c =  service.insert(carro);
+        return "Carro salvo com sucesso: " + c.getId();
     }
 
-    @PostMapping()
-    public String post(){
-        return "Post Spring Boot teste";
+    @PutMapping("/{id}")
+    public String put(@PathVariable("id") Long id, @RequestBody Carro carro){
+        Carro c = service.update(carro, id);
+        return "Carro atualizado com sucesso: " +  c.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        service.delete(id);
+
+        return "Carro deletado com sucesso!";
     }
 
 
-    @PutMapping()
-    public String put(){
-        return "Put Spring Boot teste";
-    }
 
-    @DeleteMapping()
-    public String delete(){
-        return "Delete Spring Boot teste";
-    } */
+
+
 
 }
